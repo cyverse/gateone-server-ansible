@@ -1,0 +1,5 @@
+---
+- name: this is the playbook for installing gateone
+  hosts: gateone-servers
+  roles:
+    - gateone-install-from-source

@@ -1,0 +1,15 @@
+GATEONE_REPO: "https://github.com/liftoff/GateOne.git"
+GATEONE_CONFIG_REPO: "https://github.com/somerepo/somerepo.git"
+SSH_HOST_SRC: "/opt/gateone-certs"
+SSH_HOST_KEY: "hostname.key"
+SSH_HOST_CERT: "hostname.cer"
+UFW_DO_CONFIGURE: true
+UFW_INCOMING_ALLOW:
+  - { ip: "any", port: 22 }
+  - { ip: "any", port: 443 }
+UFW_OUTGOING_ALLOW:
+  - { ip: "any", port: 123 }
+  - { ip: "any", port: 53 }
+  - { ip: "any", port: 67 }
+  - { ip: "any", port: 68 }
+  - { ip: "any", port: 22 }
