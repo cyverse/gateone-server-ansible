@@ -26,3 +26,5 @@ This repo provides the ansible playbook and role needed to install gateone.  To 
   * 20authentication.conf
   * 50terminal.conf
   * ssh_config_global
+
+
