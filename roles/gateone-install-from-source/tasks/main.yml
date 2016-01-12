@@ -1,11 +1,43 @@
+###
+# This section is to define firewall rules
+###
+
+- include: ufw.yml
+  when: UFW_DO_CONFIGURE
+
+###
+# This is the main section to install gateone
+###
 - name: install dependent packages
   apt: name="{{ item }}" update_cache=yes
   with_items:
+    - apache2
     - python-pip
     - build-essential
     - python-dev
     - git
     - python-imaging
+
+- name: enable apache ssl
+  apache2_module: state=present name="{{ item }}"
+  with_items:
+    - ssl
+    - proxy
+    - proxy_http
+    - proxy_wstunnel
+  notify: restart apache
+
+- name: link apache config file
+  file: src="/opt/gateone-config/gateone-ssl.conf" dest="/etc/apache2/sites-enabled/gateone-ssl.conf" state=link
+  notify: restart apache
+
+- name: link the certficate file
+  file: src="{{SSH_HOST_SRC}}/{{ SSH_HOST_CERT }}" dest="/etc/ssl/certs/{{ SSH_HOST_CERT }}" state=link force=yes
+  notify: restart apache
+
+- name: link the certficate file
+  file: src="{{SSH_HOST_SRC}}/{{ SSH_HOST_KEY }}" dest="/etc/ssl/private/{{ SSH_HOST_KEY }}" state=link force=yes
+  notify: restart apache
 
 - name: install pip packages
   pip: name="{{ item }}"
@@ -54,10 +86,3 @@
 - name: enable the gateone service
   service: name=gateone enabled=yes state=started
   notify: restart gateone
-
-###
-# This section is to define firewall rules
-###
-
-- include: ufw.yml
-  when: UFW_DO_CONFIGURE
