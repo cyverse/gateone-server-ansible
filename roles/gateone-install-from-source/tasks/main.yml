@@ -32,11 +32,13 @@
   notify: restart apache
 
 - name: link the certficate file
-  file: src="{{SSH_HOST_SRC}}/{{ SSH_HOST_CERT }}" dest="/etc/ssl/certs/{{ SSH_HOST_CERT }}" state=link force=yes
+  file: src="{{SSL_HOST_SRC}}/{{ item }}" dest="/etc/ssl/certs/{{ item }}" state=link force=yes
+  with_items:
+    - {{ SSL_HOST_CERT }}
   notify: restart apache
 
-- name: link the certficate file
-  file: src="{{SSH_HOST_SRC}}/{{ SSH_HOST_KEY }}" dest="/etc/ssl/private/{{ SSH_HOST_KEY }}" state=link force=yes
+- name: link the key file
+  file: src="{{SSL_HOST_SRC}}/{{ SSL_HOST_KEY }}" dest="/etc/ssl/private/{{ SSL_HOST_KEY }}" state=link force=yes
   notify: restart apache
 
 - name: install pip packages
