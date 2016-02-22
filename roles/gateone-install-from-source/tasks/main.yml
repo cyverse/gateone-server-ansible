@@ -17,6 +17,7 @@
     - python-dev
     - git
     - python-imaging
+    - dtach
 
 - name: enable apache ssl
   apache2_module: state=present name="{{ item }}"
@@ -25,7 +26,12 @@
     - proxy
     - proxy_http
     - proxy_wstunnel
+    - headers
   notify: restart apache
+
+- name: clone the GateOne config
+  git: repo="{{ GATEONE_CONFIG_REPO }}" dest=/opt/gateone-config accept_hostkey=yes
+  notify: restart gateone
 
 - name: link apache config file
   file: src="/opt/gateone-config/gateone-ssl.conf" dest="/etc/apache2/sites-enabled/gateone-ssl.conf" state=link
@@ -34,7 +40,7 @@
 - name: link the certficate file
   file: src="{{SSL_HOST_SRC}}/{{ item }}" dest="/etc/ssl/certs/{{ item }}" state=link force=yes
   with_items:
-    - {{ SSL_HOST_CERT }}
+    - "{{ SSL_HOST_CERT }}"
   notify: restart apache
 
 - name: link the key file
@@ -47,11 +53,7 @@
     - tornado
 
 - name: clone the GateOne source
-  git: repo="{{ GATEONE_REPO }}" dest=/opt/GateOne
-  notify: restart gateone
-
-- name: clone the GateOne config
-  git: repo="{{ GATEONE_CONFIG_REPO }}" dest=/opt/gateone-config
+  git: repo="{{ GATEONE_REPO }}" dest=/opt/GateOne accept_hostkey=yes
   notify: restart gateone
 
 - name: setup install GateOne
@@ -65,7 +67,7 @@
 #  shell: /usr/local/bin/gateone --configure creates=/etc/gateone/conf.d/10server.conf
 
 - name: ensure conf directory exists
-  file: dest=/etc/gateone/conf.d/ state=directory
+  file: dest="{{ item }}" state=directory
   with_items:
     - "/etc/gateone/conf.d/"
     - "/etc/gateone/ssl/"
@@ -79,10 +81,10 @@
     - ssh_config_global
 
 - name: link the source ssl files
-  file: src="{{SSH_HOST_SRC}}/{{ item }}" dest="/etc/gateone/ssl/{{ item }}" state=link force=yes
+  file: src="{{SSL_HOST_SRC}}/{{ item }}" dest="/etc/gateone/ssl/{{ item }}" state=link force=yes
   with_items:
-    - "{{ SSH_HOST_KEY }}"
-    - "{{ SSH_HOST_CERT }}"
+    - "{{ SSL_HOST_KEY }}"
+    - "{{ SSL_HOST_CERT }}"
   notify: restart gateone
 
 - name: enable the gateone service
