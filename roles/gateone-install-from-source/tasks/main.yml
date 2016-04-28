@@ -11,31 +11,21 @@
 - name: install dependent packages
   apt: name="{{ item }}" update_cache=yes
   with_items:
-    - apache2
     - python-pip
     - build-essential
     - python-dev
     - git
     - python-imaging
     - dtach
-
-- name: enable apache ssl
-  apache2_module: state=present name="{{ item }}"
-  with_items:
-    - ssl
-    - proxy
-    - proxy_http
-    - proxy_wstunnel
-    - headers
-  notify: restart apache
+    - nginx
 
 - name: clone the GateOne config
   git: repo="{{ GATEONE_CONFIG_REPO }}" dest=/opt/gateone-config accept_hostkey=yes
   notify: restart gateone
 
-- name: link apache config file
-  file: src="/opt/gateone-config/gateone-ssl.conf" dest="/etc/apache2/sites-enabled/gateone-ssl.conf" state=link
-  notify: restart apache
+- name: link nginx config file
+  file: src="/opt/gateone-config/gateone-ssl-nginx.conf" dest="/etc/nginx/sites-enabled/default" state=link
+  notify: restart nginx
 
 - name: link the certficate file
   file: src="{{SSL_HOST_SRC}}/{{ item }}" dest="/etc/ssl/certs/{{ item }}" state=link force=yes
