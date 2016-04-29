@@ -27,6 +27,17 @@
   file: src="/opt/gateone-config/gateone-ssl-nginx.conf" dest="/etc/nginx/sites-enabled/default" state=link
   notify: restart nginx
 
+- name: clone the nginx config for gateone
+  git: repo="https://github.com/cyverse/nginx_gateone_config.git" dest=/opt/nginx_gateone_config accept_hostkey=yes
+  notify: restart nginx
+
+- name: ensure locations directory exists
+  file: dest="/etc/nginx/locations" state=directory
+
+- name: link nginx gateone file
+  file: src="/opt/nginx_gateone_config/gateone-nginx-location.conf" dest="/etc/nginx/locations/gateone-nginx-location.conf" state=link
+  notify: restart nginx
+
 - name: link the certficate file
   file: src="{{SSL_HOST_SRC}}/{{ item }}" dest="/etc/ssl/certs/{{ item }}" state=link force=yes
   with_items:
