@@ -1,5 +1,6 @@
 GATEONE_REPO: "https://github.com/liftoff/GateOne.git"
 GATEONE_CONFIG_REPO: "https://github.com/somerepo/somerepo.git"
+GATEONE_USER: "jsansible"
 SSL_HOST_SRC: "/opt/gateone-certs"
 SSL_HOST_KEY: "hostname.key"
 SSL_HOST_CERT: "hostname.cer"
