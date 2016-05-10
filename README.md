@@ -24,6 +24,7 @@ This repo provides the ansible playbook and role needed to install gateone.  To 
 * The GATEONE_CONFIG_REPO assumes the following files exist:
   * 10server.conf
   * 20authentication.conf
+  * 30api_keys.conf
   * 50terminal.conf
   * ssh_config_global
 

@@ -78,6 +78,7 @@
   with_items:
     - 10server.conf
     - 20authentication.conf
+    - 30api_keys.conf
     - 50terminal.conf
     - ssh_config_global
 
