@@ -42,11 +42,11 @@
   file: src="{{SSL_HOST_SRC}}/{{ item }}" dest="/etc/ssl/certs/{{ item }}" state=link force=yes
   with_items:
     - "{{ SSL_HOST_CERT }}"
-  notify: restart apache
+  notify: restart nginx
 
 - name: link the key file
   file: src="{{SSL_HOST_SRC}}/{{ SSL_HOST_KEY }}" dest="/etc/ssl/private/{{ SSL_HOST_KEY }}" state=link force=yes
-  notify: restart apache
+  notify: restart nginx
 
 - name: install pip packages
   pip: name="{{ item }}"
