@@ -1,7 +1,7 @@
 ---
 - name: this is the playbook for installing gateone
   hosts: gateone-servers
-  remote_user: jsansible
+  remote_user: "{{ GATEONE_USER }}"
   become: true
   roles:
     - gateone-install-from-source
